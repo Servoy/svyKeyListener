@@ -12,6 +12,7 @@
  	{
 	   	"addKeyListener": 
 	   	{
+            "async": true,
 	    	"parameters":
 	    	[
 		    	{
