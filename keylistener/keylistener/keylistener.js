@@ -99,10 +99,10 @@ angular.module('keyListener', ['servoy']).factory("keyListener", function($servi
 				
 				element.keyup(function(event) {
 					keyListener.handleKeyEvent(element, event, attributes['keylistener']);
-				}),
+				});
 				element.keypress(function(event) {
 					keyListener.handleKeyEvent(element, event, attributes['keylistener']);
-				}),
+				});
 				element.keydown(function(event) {
 					if (event.keyCode === 20 && navigator.appVersion.indexOf("Mac") != -1) {
 						// handle caps lock keyevent exceptions on Mac:
