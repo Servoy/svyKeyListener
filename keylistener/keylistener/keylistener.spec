@@ -3,6 +3,11 @@
 	"displayName": "keyListener",
 	"version": 1,
  	"definition": "svykeylistener/keylistener/keylistener.js",
+ 	"ng2Config": {
+       "packageName": "@servoy/keylistener",
+       "serviceName": "KeyListener",
+       "entryPoint": "dist/servoy/keylistener"
+    },
 	"libraries": [],
 	"model":
 	{		
