@@ -27,6 +27,16 @@ export class KeyListener implements IComponentContributorListener {
                 renderer.listen(element, 'keyup', (event) => {
                     const callback = this.getCallback(attribute);
                     if (callback) {
+                        //if there is a restriction on the pattern, remove last typed character in the event if not matching.
+                        if (callback.regexPattern) {
+                            const regexPattern = new RegExp(callback.regexPattern, 'g');
+                            var s = event.key;
+                            if (!s) return;
+                            var tmp = event.target.value
+                            event.target.value = event.target.value.replace(regexPattern, callback.regexReplacement);
+                            //if replace was done, don't fire event.
+                            if (tmp.length != event.target.value.length) return;
+                        }
                         const ev = this.servoyService.createJSEvent(event, 'keyup');
                         let capsLockEnabled = false;
                         if (event instanceof KeyboardEvent) {
@@ -34,17 +44,25 @@ export class KeyListener implements IComponentContributorListener {
                         } else if (event.originalEvent instanceof KeyboardEvent) {
                             capsLockEnabled = event.originalEvent.getModifierState('CapsLock');
                         }
-                        this.servoyService.executeInlineScript(callback.formname, callback.script,
-                            [element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
+                        if (callback.delay) {
+                            setTimeout(() => {
+                                this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
+                                    [element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
+                            }, callback.delay);
+                        }
+                        else {
+                            this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
+                                [element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
+                        }
                     }
                 });
             }
         }
     }
 
-    public addKeyListener(callbackKey: string, callback: Function, clearCB?: boolean) {
+    public addKeyListener(callbackKey: string, callback: Function, clearCB?: boolean, delay?: number, regexPattern?: string, regexReplacement?: string) {
         if (clearCB) this._callbacks = [];
-        this._callbacks.push({ callbackKey, callback });
+        this._callbacks.push({ callbackKey, callback, delay, regexPattern, regexReplacement });
         this.servoyService.sendServiceChanges('keyListener', 'callbacks', this._callbacks);
     }
 
@@ -58,15 +76,18 @@ export class KeyListener implements IComponentContributorListener {
         return false;
     }
 
-    private getCallback(callbackKey: String): Function {
+    private getCallback(callbackKey: String): Callback {
         const cb = this._callbacks.find(c => c.callbackKey === callbackKey);
-        return cb ? cb.callback : undefined;
+        return cb;
     }
 }
 
 class Callback {
     public callbackKey: string;
     public callback: Function;
+    public delay: number;
+    public regexPattern: string;
+    public regexReplacement: string;
 }
 
 class Function {
