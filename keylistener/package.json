@@ -1,12 +1,12 @@
 {
   "name": "keylistener",
-  "version": "2022.3.1",
+  "version": "2022.3.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --configuration production",
     "build_debug": "ng build --watch",
-     "make_release": "node scripts/build.js",
+    "make_release": "ng build --configuration production && node scripts/build.js",
     "test": "ng test",
     "lint": "ng lint"
   },
