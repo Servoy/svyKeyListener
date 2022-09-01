@@ -1,9 +1,9 @@
 {
   "name": "@servoy/keylistener",
-  "version": "2022.3.2",
+  "version": "2022.9.0",
   "peerDependencies": {
-     "@angular/common": ">=12",
-     "@angular/core": ">=12"
+     "@angular/common": "^14",
+     "@angular/core": "^14"
   },
   "dependencies": {
     "tslib": "*"
