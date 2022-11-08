@@ -27,33 +27,59 @@ export class KeyListener implements IComponentContributorListener {
                 renderer.listen(element, 'keyup', (event) => {
                     const callback = this.getCallback(attribute);
                     if (callback) {
-                        //if there is a restriction on the pattern, remove last typed character in the event if not matching.
-                        if (callback.regexPattern) {
-                            const regexPattern = new RegExp(callback.regexPattern, 'g');
-                            var s = event.key;
-                            if (!s) return;
-                            var tmp = event.target.value
-                            event.target.value = event.target.value.replace(regexPattern, callback.regexReplacement);
-                            //if replace was done, don't fire event.
-                            if (tmp.length != event.target.value.length) return;
-                        }
-                        const ev = this.servoyService.createJSEvent(event, 'keyup');
-                        let capsLockEnabled = false;
-                        if (event instanceof KeyboardEvent) {
-                            capsLockEnabled = event.getModifierState('CapsLock');
-                        } else if (event.originalEvent instanceof KeyboardEvent) {
-                            capsLockEnabled = event.originalEvent.getModifierState('CapsLock');
-                        }
-                        if (callback.delay) {
-                            setTimeout(() => {
-                                this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
-                                    [element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
-                            }, callback.delay);
-                        }
-                        else {
-                            this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
-                                [element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
-                        }
+						// select2
+						if (event.detail) {
+							//if there is a restriction on the pattern, remove last typed character in the event if not matching.
+                        	if (callback.regexPattern) {
+                            	const regexPattern = new RegExp(callback.regexPattern, 'g');
+                            	var s = event.detail.key();
+                            	if (!s) return;
+                            	var tmp = event.detail.target().value
+                            	event.detail.target().value = event.detail.target().value.replace(regexPattern, callback.regexReplacement);
+                            	//if replace was done, don't fire event.
+                            	if (tmp.length != event.detail.target().value.length) return;
+                        	}
+                        	const ev = this.servoyService.createJSEvent(event, 'keyup');
+                        	let capsLockEnabled = event.detail.capsLockEnabled();
+                        	if (callback.delay) {
+                            	setTimeout(() => {
+                                	this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
+                                    	[event.detail.target().value, ev, event.detail.keyCode(), event.detail.altKey(), event.detail.ctrlKey(), event.detail.shiftKey(), capsLockEnabled]);
+                            	}, callback.delay);
+                        	}
+                        	else {
+                            	this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
+                                	[event.detail.target().value, ev, event.detail.keyCode(), event.detail.altKey(), event.detail.ctrlKey(), event.detail.shiftKey(), capsLockEnabled]);
+                        	}
+						} else { // other components
+							//if there is a restriction on the pattern, remove last typed character in the event if not matching.
+                        	if (callback.regexPattern) {
+                            	const regexPattern = new RegExp(callback.regexPattern, 'g');
+                            	var s = event.key;
+                            	if (!s) return;
+                            	var tmp = event.target.value
+                            	event.target.value = event.target.value.replace(regexPattern, callback.regexReplacement);
+                            	//if replace was done, don't fire event.
+                            	if (tmp.length != event.target.value.length) return;
+                        	}
+                        	const ev = this.servoyService.createJSEvent(event, 'keyup');
+                        	let capsLockEnabled = false;
+                        	if (event instanceof KeyboardEvent) {
+                            	capsLockEnabled = event.getModifierState('CapsLock');
+                        	} else if (event.originalEvent instanceof KeyboardEvent) {
+                            	capsLockEnabled = event.originalEvent.getModifierState('CapsLock');
+                        	}
+                        	if (callback.delay) {
+                            	setTimeout(() => {
+                                	this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
+                                    	[element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
+                            	}, callback.delay);
+                        	}
+                        	else {
+                            	this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
+                                	[element.value, ev, event.keyCode, event.altKey, event.ctrlKey, event.shiftKey, capsLockEnabled]);
+                        	}
+						}
                     }
                 });
             }
