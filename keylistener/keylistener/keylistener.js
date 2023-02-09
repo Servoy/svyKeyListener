@@ -14,6 +14,10 @@ angular.module('keyListener', ['servoy']).factory("keyListener", function($servi
 			// it may remove more than one element
 			for (var i = 0; scope.model.callbacks && i < scope.model.callbacks.length; i++) {
 				var c = scope.model.callbacks[i];
+				if (!c){
+				    $log.error("Invalid null value found in callbacks array. Please report this bug to Servoy (with some steps to reproduce).");
+				    continue;
+				}
 				if (c.callbackKey == callbackKey) {
 					scope.model.callbacks.splice(i, 1);
 					i--;
