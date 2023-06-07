@@ -19,12 +19,14 @@ export class KeyListener implements IComponentContributorListener {
     }
 
     public componentCreated(component: ServoyBaseComponent<any>) {
-        const element = component.getNativeChild();
+        const child = component.getNativeChild();
+        const element = component.getNativeElement();
         const renderer = component.getRenderer();
         if (element) {
-            const attribute = element.getAttribute('keylistener');
+            let attribute = element.getAttribute('keylistener');
+            if (!attribute) child.getAttribute('keylistener');
             if (attribute) {
-                renderer.listen(element, 'keyup', (event) => {
+                renderer.listen(child, 'keyup', (event) => {
 					const eventObject = event.detail ? event.detail : event;
                     const callback = this.getCallback(attribute);
                     if (callback) {
