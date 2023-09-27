@@ -47,15 +47,21 @@ export class KeyListener implements IComponentContributorListener {
                         } else if (eventObject.originalEvent instanceof KeyboardEvent) {
                             capsLockEnabled = eventObject.originalEvent.getModifierState('CapsLock');
                         }
+                        let value;
+                        if (child.classList.contains('svy-extra-htmlarea')) {
+							value = event.target.querySelector('iframe').contentWindow.document.querySelector('body').getInnerHTML();
+						} else {
+							value = eventObject.target.value;
+						}
                         if (callback.delay) {
                             setTimeout(() => {
                                 this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
-                                    [eventObject.target.value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled]);
+                                    [value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled]);
                             }, callback.delay);
                         }
                         else {
                             this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
-                                [eventObject.target.value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled]);
+                                [value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled]);
                         }
 					}
                 });
