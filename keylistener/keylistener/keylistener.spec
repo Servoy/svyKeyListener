@@ -1,6 +1,6 @@
 {
 	"name": "keyListener",
-	"displayName": "keyListener",
+	"displayName": "Key Listener",
 	"version": 1,
  	"definition": "svykeylistener/keylistener/keylistener.js",
  	"doc": "svykeylistener/keylistener/keylistener_doc.js",
