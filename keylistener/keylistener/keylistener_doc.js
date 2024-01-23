@@ -10,7 +10,7 @@
  *
  * @example plugins.keyListener.addKeyListener('test', onKey)
  */
-function addKeyListener (callbackKey, callback, clearPreviousCallback, delay, regexPattern, regexReplacement) {
+function addKeyListener(callbackKey, callback, clearPreviousCallback, delay, regexPattern, regexReplacement) {
 
 }
 
