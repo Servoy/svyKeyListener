@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { ComponentContributor, IComponentContributorListener, ServoyBaseComponent, ServoyPublicService } from '@servoy/public';
 
+type CallableFunction = (...args: unknown[]) => void;
+
 @Injectable()
 export class KeyListener implements IComponentContributorListener {
     private _callbacks: Callback[] = [];
@@ -55,13 +57,11 @@ export class KeyListener implements IComponentContributorListener {
 						}
                         if (callback.delay) {
                             setTimeout(() => {
-                                this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
-                                    [value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled]);
+                                callback.callback(value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
                             }, callback.delay);
                         }
                         else {
-                            this.servoyService.executeInlineScript(callback.callback.formname, callback.callback.script,
-                                [value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled]);
+                            callback.callback(value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
                         }
 					}
                 });
@@ -69,7 +69,7 @@ export class KeyListener implements IComponentContributorListener {
         }
     }
 
-    public addKeyListener(callbackKey: string, callback: Function, clearCB?: boolean, delay?: number, regexPattern?: string, regexReplacement?: string) {
+    public addKeyListener(callbackKey: string, callback: (...args: unknown[]) => void, clearCB?: boolean, delay?: number, regexPattern?: string, regexReplacement?: string) {
         if (clearCB) this._callbacks = [];
         this._callbacks.push({ callbackKey, callback, delay, regexPattern, regexReplacement });
         this.servoyService.sendServiceChanges('keyListener', 'callbacks', this._callbacks);
@@ -93,13 +93,8 @@ export class KeyListener implements IComponentContributorListener {
 
 class Callback {
     public callbackKey: string;
-    public callback: Function;
+    public callback: CallableFunction;
     public delay: number;
     public regexPattern: string;
     public regexReplacement: string;
-}
-
-class Function {
-    public formname: string;
-    public script: string;
 }
