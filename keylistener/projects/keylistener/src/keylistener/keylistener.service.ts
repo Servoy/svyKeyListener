@@ -70,7 +70,9 @@ export class KeyListener implements IComponentContributorListener {
     }
 
     public addKeyListener(callbackKey: string, callback: (...args: unknown[]) => void, clearCB?: boolean, delay?: number, regexPattern?: string, regexReplacement?: string) {
-        if (clearCB) this._callbacks = [];
+        if (clearCB) {
+            this._callbacks = this._callbacks.filter(c => c.callbackKey !== callbackKey);
+        }
         this._callbacks.push({ callbackKey, callback, delay, regexPattern, regexReplacement });
         this.servoyService.sendServiceChanges('keyListener', 'callbacks', this._callbacks);
     }
