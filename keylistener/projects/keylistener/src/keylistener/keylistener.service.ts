@@ -20,6 +20,8 @@ export class KeyListener implements IComponentContributorListener {
         this._callbacks = callbacks;
     }
 
+    private runningDelayTimeout = null;
+
     public componentCreated(component: ServoyBaseComponent<any>) {
         const child = component.getNativeChild();
         const element = component.getNativeElement();
@@ -56,7 +58,10 @@ export class KeyListener implements IComponentContributorListener {
 							value = eventObject.target.value;
 						}
                         if (callback.delay) {
-                            setTimeout(() => {
+                            if(this.runningDelayTimeout) {
+                                clearTimeout(this.runningDelayTimeout);
+                            }
+                            this.runningDelayTimeout = setTimeout(() => {
                                 callback.callback(value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
                             }, callback.delay);
                         }
