@@ -62,6 +62,7 @@ export class KeyListener implements IComponentContributorListener {
                                 clearTimeout(this.runningDelayTimeout);
                             }
                             this.runningDelayTimeout = setTimeout(() => {
+                                this.runningDelayTimeout = null;
                                 callback.callback(value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
                             }, callback.delay);
                         }
