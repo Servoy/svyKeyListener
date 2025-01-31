@@ -51,28 +51,32 @@ export class KeyListener implements IComponentContributorListener {
                         } else if (eventObject.originalEvent instanceof KeyboardEvent) {
                             capsLockEnabled = eventObject.originalEvent.getModifierState('CapsLock');
                         }
-                        let value;
-                        if (child.classList.contains('svy-extra-htmlarea')) {
-							value = event.target.querySelector('iframe').contentWindow.document.querySelector('body').getInnerHTML();
-						} else {
-							value = eventObject.target.value;
-						}
                         if (callback.delay) {
                             if(this.runningDelayTimeout) {
                                 clearTimeout(this.runningDelayTimeout);
                             }
                             this.runningDelayTimeout = setTimeout(() => {
                                 this.runningDelayTimeout = null;
-                                callback.callback(value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
+                                callback.callback(this.getValue(child, event, eventObject), ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
                             }, callback.delay);
                         }
                         else {
-                            callback.callback(value, ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
+                            callback.callback(this.getValue(child, event, eventObject), ev, eventObject.keyCode, eventObject.altKey, eventObject.ctrlKey, eventObject.shiftKey, capsLockEnabled);
                         }
 					}
                 });
             }
         }
+    }
+    
+    private getValue(child: Element, event: Event, eventObject: KeyboardEvent) {
+        let value;
+        if (child.classList.contains('svy-extra-htmlarea')) {
+            value = (event.target as Element).querySelector('iframe').contentWindow.document.querySelector('body').innerHTML;
+        } else {
+            value = (eventObject.target as HTMLInputElement).value;
+        }
+        return value;
     }
 
     public addKeyListener(callbackKey: string, callback: (...args: unknown[]) => void, clearCB?: boolean, delay?: number, regexPattern?: string, regexReplacement?: string) {
