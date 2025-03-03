@@ -1,6 +1,3 @@
-var callbacks;
-
-
 /**
  * Registers the listener on the components which have the "keylistener" attribute with the given callbackKey value, to call the given callback when a key is pressed.
  *
