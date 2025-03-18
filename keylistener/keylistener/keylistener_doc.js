@@ -25,3 +25,22 @@ function addKeyListener(callbackKey, callback, clearPreviousCallback, delay, reg
 function removeKeyListener(callbackKey) {
          
 }
+
+var svy_types = {
+
+    callback: {
+
+        callbackKey : null,
+
+        callback : null,
+
+        isRunning : null,
+
+        delay : null,
+
+        regexPattern : null,
+
+        regexReplacement : null,
+
+    }
+}
