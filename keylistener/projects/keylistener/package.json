@@ -1,6 +1,6 @@
 {
   "name": "@servoy/keylistener",
-  "version": "2024.3.2",
+  "version": "2025.3.0",
   "peerDependencies": {
      "@angular/common": "^17",
      "@angular/core": "^17"
