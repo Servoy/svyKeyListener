@@ -1,5 +1,5 @@
-/**
- * A Servoy Extra Component that handles keyboard events and provides key listener functionality.
+/*
+ * A service that allows you to handle keyboard shortcuts/provides key listener functionality.
  */
 
 /**
