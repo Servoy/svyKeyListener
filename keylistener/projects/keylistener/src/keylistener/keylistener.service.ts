@@ -27,7 +27,7 @@ export class KeyListener implements IComponentContributorListener {
         const element = component.getNativeElement();
         const renderer = component.getRenderer();
         if (element) {
-            let attribute = element.getAttribute('keylistener');
+            const attribute = element.getAttribute('keylistener');
             if (!attribute) child.getAttribute('keylistener');
             if (attribute) {
                 renderer.listen(child, 'keyup', (event) => {
@@ -37,9 +37,9 @@ export class KeyListener implements IComponentContributorListener {
 						//if there is a restriction on the pattern, remove last typed character in the event if not matching.
                         if (callback.regexPattern) {
                             const regexPattern = new RegExp(callback.regexPattern, 'g');
-                            var s = eventObject.key;
+                            const s = eventObject.key;
                             if (!s) return;
-                            var tmp = eventObject.target.value
+                            const tmp = eventObject.target.value
                             eventObject.target.value = eventObject.target.value.replace(regexPattern, callback.regexReplacement);
                             //if replace was done, don't fire event.
                             if (tmp.length != eventObject.target.value.length) return;
@@ -97,7 +97,7 @@ export class KeyListener implements IComponentContributorListener {
         return false;
     }
 
-    private getCallback(callbackKey: String): Callback | undefined {
+    private getCallback(callbackKey: string): Callback | undefined {
         return this._callbacks.find(c => c.callbackKey === callbackKey);
     }
 }
