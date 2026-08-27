@@ -20,7 +20,7 @@ export class KeyListener implements IComponentContributorListener {
         this._callbacks = callbacks;
     }
 
-    private runningDelayTimeout = null;
+    private runningDelayTimeout: ReturnType<typeof setTimeout> | null = null;
 
     public componentCreated(component: ServoyBaseComponent<any>) {
         const child = component.getNativeChild();
@@ -72,7 +72,7 @@ export class KeyListener implements IComponentContributorListener {
     private getValue(child: Element, event: Event, eventObject: KeyboardEvent) {
         let value;
         if (child.classList.contains('svy-extra-htmlarea')) {
-            value = (event.target as Element).querySelector('iframe').contentWindow.document.querySelector('body').innerHTML;
+            value = (event.target as Element).querySelector('iframe')?.contentWindow?.document.querySelector('body')?.innerHTML;
         } else {
             value = (eventObject.target as HTMLInputElement).value;
         }
@@ -97,16 +97,15 @@ export class KeyListener implements IComponentContributorListener {
         return false;
     }
 
-    private getCallback(callbackKey: String): Callback {
-        const cb = this._callbacks.find(c => c.callbackKey === callbackKey);
-        return cb;
+    private getCallback(callbackKey: String): Callback | undefined {
+        return this._callbacks.find(c => c.callbackKey === callbackKey);
     }
 }
 
 class Callback {
-    public callbackKey: string;
-    public callback: CallableFunction;
-    public delay: number;
-    public regexPattern: string;
-    public regexReplacement: string;
+    public callbackKey!: string;
+    public callback!: CallableFunction;
+    public delay?: number;
+    public regexPattern?: string;
+    public regexReplacement?: string;
 }
